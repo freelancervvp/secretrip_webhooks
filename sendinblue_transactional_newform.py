@@ -3,8 +3,10 @@ print(Hook['params'])
 print("Hook['req'] is the http request")
 print(Hook['req']['url'])
 import requests
+name = Hook['params']['name'].encode('utf-8','surrogateescape').decode('utf-8')
+email = Hook['params']['email']
+api_key = Hook['env']['sendinblue_api_key']
 url = "https://api.sendinblue.com/v3/smtp/email"
-a = 'Владимир'.encode('utf-8','surrogatepass')
-payload = "{\"sender\":{\"name\":\"Secret Trip\",\"email\":\"hello@secretrip.ru\"},\"to\":[{\"email\":\"freelancervvp@gmail.com\",\"name\":\"VLADIMIR\"}],\"htmlContent\":\"\",\"subject\":\"\",\"replyTo\":{\"email\":\"hello@secretrip.ru\",\"name\":\"Secret Trip\"},\"templateId\":5,\"params\":{\"NAME\":\"%s\"}}" % Hook['params']['name']
-response = requests.request("POST", url, data=payload, headers={'api-key': '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','content-type': 'application/json'})
+payload = "{\"sender\":{\"name\":\"Secret Trip\",\"email\":\"hello@secretrip.ru\"},\"to\":[{\"email\":\"%s\",\"name\":\"%s\"}],\"htmlContent\":\"\",\"subject\":\"\",\"replyTo\":{\"email\":\"hello@secretrip.ru\",\"name\":\"Secret Trip\"},\"templateId\":5,\"params\":{\"NAME\":\"%s\"}}" % (email,name,name)
+response = requests.request("POST", url, data=payload.encode("utf-8"), headers={'api-key': api_key,'content-type': 'application/json'})
 print(response.text)
